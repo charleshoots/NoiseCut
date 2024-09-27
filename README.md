@@ -22,7 +22,7 @@ st = obspy.read('file_name')
 hps_trace, spectrograms = noisecut.noisecut(st[0], ret_spectrograms=True)
 noisecut.plot_noisecut_spectrograms(*spectrograms)
 ```
-
+k
 ## Installation instructions
 
 You can clone the public repository:
