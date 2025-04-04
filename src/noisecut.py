@@ -59,9 +59,8 @@ def plot_noisecut_spectrograms(S_full, S_background, S_hps, frequencies, times, 
         axs.set_xticks([])
         cbar=fig.colorbar(pcm, ax=axs, pad= 0.01)
         cbar.ax.tick_params(labelsize=14)
+        plt.yscale('log')
         plt.ylim(0,ymax)
-        # plt.yscale('log')
-
         # PLOT-2::----
         axs=fig.add_subplot(312)
         pcm=axs.pcolormesh(times, frequencies, librosa.power_to_db(np.abs(S_background)), cmap = 'magma', shading= 'auto')
@@ -71,9 +70,8 @@ def plot_noisecut_spectrograms(S_full, S_background, S_hps, frequencies, times, 
         axs.set_xticks([])
         cbar=fig.colorbar(pcm, ax=axs, pad= 0.01)
         cbar.ax.tick_params(labelsize=14)
+        plt.yscale('log')
         plt.ylim(0,ymax)
-        # plt.yscale('log')
-
         # PLOT-3::----
         axs=fig.add_subplot(313)
         pcm=axs.pcolormesh(times, frequencies, librosa.power_to_db(np.abs(S_hps)), cmap = 'magma', shading= 'auto')
@@ -82,9 +80,8 @@ def plot_noisecut_spectrograms(S_full, S_background, S_hps, frequencies, times, 
         plt.yticks (fontsize= 14)
         cbar=fig.colorbar(pcm, ax=axs, pad= 0.01)
         cbar.ax.tick_params(labelsize=14)
+        plt.yscale('log')
         plt.ylim(0,ymax)
-        # plt.yscale('log')
-
         # labels at the end
         plt.xlabel(units[0])
         # plt.tight_layout()
@@ -94,7 +91,7 @@ def noisecut(
         trace,
         ret_spectrograms=False,
         win_length_samples=None,
-        win_length=None,resample_factor=1.0,width=None):
+        win_length=163.84,resample_factor=1.0,width=None,kernel_size=80,overlap=0.75,verbose=True,margin=5):
     '''
     Reduce noise from all the components of the OBS data using HPS noise
     reduction algorithms.
@@ -123,10 +120,12 @@ def noisecut(
 
     win_length_samples = _valid_win_length_samples(
         win_length_samples, win_length, trace.stats.sampling_rate)
-
-    hop_length = win_length_samples // 4
+    
+    windows = int(1/(1-overlap))
+    hop_length = win_length_samples // windows
     n_fft = win_length_samples
-
+    if verbose:
+        print('Building raw spectrogram from STFT | hop_length={hop_length}, n_fft={n_fft}, win_length_samples={win_length_samples}'.format(hop_length=hop_length,n_fft=n_fft,win_length_samples=win_length_samples))
     # Compute the spectrogram amplitude and phase
     S_full, phase = librosa.magphase(librosa.stft(
         x,
@@ -144,11 +143,11 @@ def noisecut(
     l1 = math.floor((0.1 * win_length_samples) / trace.stats.sampling_rate)
     l2 = math.ceil((1 * win_length_samples) / trace.stats.sampling_rate)
 
-    # We consider the frequency range out of the [0.1-1] Hz for the first step
+    # We consider the frequency range of [0.1-1] Hz for the second step
     S_full2 = np.zeros((S_full.shape[0], S_full.shape[1]))
     S_full2[l1:l2, :] = S_full[l1:l2, :]
 
-    # We consider the frequency range of [0.1-1] Hz for the second step
+    # We consider the frequency range out of the [0.1-1] Hz for the first step
     S_full1 = np.zeros((S_full.shape[0], S_full.shape[1]))
     S_full1[:l1, :] = S_full[:l1, :]
     S_full1[l2:, :] = S_full[l2:, :]
@@ -156,10 +155,13 @@ def noisecut(
     # We'll compare frames using cosine similarity, and aggregate similar
     # frames by taking their (per-frequency) median value.
     if width is None:
-        width = (((S_full1.shape[-1] - 1) // 2) - 1) // 5 #Was hardcoded at 200. This sets the width at the largest value possible for the data given to the similarity filter.
-    # print('Match-Filter Width='+str(width))
+        width = ((((S_full1.shape[-1] - 1) // 2) - 1) // 5) - 10 
+        #Was hardcoded at 200. 
+        #This defines the minimum waiting factor, in samples, implimented by the similarity filter.
+        #This sets the width at the largest value possible for the data given to the similarity filter.
+    if verbose:
+        print('Match-Filter | width='+str(width))
     S_filter = librosa.decompose.nn_filter(S_full1,aggregate=np.median,metric='cosine', width=width)
-
     # The output of the filter shouldn't be greater than the input
     S_filter = np.minimum(np.abs(S_full1), np.abs(S_filter))
     margin_i = 1
@@ -174,11 +176,12 @@ def noisecut(
 
     S_background = mask_i * S_full1
 
+    if verbose:print('HPSS Median-Filter | kernel_size='+str(kernel_size) + ', margin=' + str(margin))
     # In the second step we apply a median filter
     D_harmonic, D_percussive = librosa.decompose.hpss(
         S_full2,
-        kernel_size=80,
-        margin=5)
+        kernel_size=kernel_size,
+        margin=margin)
 
     S_background = S_background + D_harmonic
 
@@ -193,10 +196,8 @@ def noisecut(
 
     z = x - new
     stats = trace.stats
-    if len(stats.location)>0:
-        stats.location = stats.location + '->HPS'
-    else:
-        stats.location = 'HPS'
+    if len(stats.location)>0:stats.location = stats.location + '->HPS'
+    else:stats.location = 'HPS'
 
     hps_trace = Trace(data=z, header=stats)
 

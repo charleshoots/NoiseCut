@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='noisecut',
     version='0.0.1',
-    author='Zahra Zali',
+    author='Charles Hoots, adapted from Zahra Zali',
     license='AGPLv3',
     package_dir={
         'noisecut': 'src'
