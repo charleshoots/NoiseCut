@@ -1,3 +1,8 @@
+# Note: 
+This repository is my (Charles Hoots) branch of the original author's (Zali) code 
+with a few low-level tweaks and quality of life improvements but the implementation and credit goes to them.
+
+
 # NoiseCut
 [![DOI](https://zenodo.org/badge/478924343.svg)](https://zenodo.org/badge/latestdoi/478924343)
 
@@ -10,11 +15,6 @@ NoiseCut is a Python package for denoising seismic records and specializes in de
 Paper: https://se.copernicus.org/articles/14/181/2023/se-14-181-2023.pdf
 
 Paper: https://pubs.geoscienceworld.org/ssa/srl/article/92/6/3668/606262/Volcanic-Tremor-Extraction-and-Earthquake
-
-
-
-Note: This repository is my (Charles Hoots) branch of the original author's (Zali) code 
-with a few low-level tweaks and quality of life improvements but the implementation and credit goes to them.
 
 
 ## Usage example
