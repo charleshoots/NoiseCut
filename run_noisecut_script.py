@@ -64,14 +64,16 @@ width=None
 # 1-Read the SAC files one at a time
 # 2-Give each one to noisecut
 # 3-Take the output and save it to the OutputFolder
-[noisecut(read(f)[0].copy(),win_length=win_length,width=width).write(OutputFolder/f.name) for f in files]
+
+# 24-HOUR OUTPUTS:
+# [noisecut(read(f)[0].copy(),win_length=win_length,width=width).write(OutputFolder/f.name) for f in files]
 # Obviously, you can impliment this in a for loop if you wanted more control over the process, but that's up to you.
 
 
-#The above line will save the full 24-hour event to the output.
-# If you want to trim the output to just the last 2-hours of the trace for your event (event_length parameter),
-# un-comment the following lines and run them instead of the above:
+# 2-HOUR OUTPUTS:
+# If you want to trim the output to just the last 2-hours of the trace for your event (event_length parameter).
+# use the following lines and run them instead of the above:
 
-# event_length = 7200 #seconds
-# endtimes = [read(f)[0].stats.endtime for f in files]
-# [noisecut(read(f)[0].copy(),win_length=win_length,width=width).trim(t_end-event_length,t_end).write(OutputFolder/f.name) for t_end,f in zip(endtimes,files)]
+event_length = 7200 #seconds
+endtimes = [read(f)[0].stats.endtime for f in files]
+[noisecut(read(f)[0].copy(),win_length=win_length,width=width).trim(t_end-event_length,t_end).write(OutputFolder/f.name) for t_end,f in zip(endtimes,files)]
