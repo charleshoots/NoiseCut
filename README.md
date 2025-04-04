@@ -11,11 +11,18 @@ Paper: https://se.copernicus.org/articles/14/181/2023/se-14-181-2023.pdf
 
 Paper: https://pubs.geoscienceworld.org/ssa/srl/article/92/6/3668/606262/Volcanic-Tremor-Extraction-and-Earthquake
 
+
+
+Note: This repository is my (Charles Hoots) branch of the original author's (Zali) code 
+with a few low-level tweaks and quality of life improvements but the implementation and credit goes to them.
+
+
 ## Usage example
 After installing the package to denoise a signal, you can use the following code. Outputs are the denoised signal and a figure showing the spectrogram of the input signal, the separated noise, and the denoised signal in the frequency range of [0-1] Hz.
 
 import noisecut                                                                                                                                                         
 import obspy
+
 
 ```
 st = obspy.read('file_name')
@@ -35,11 +42,3 @@ python setup.py install
 ```
 You need the Numpy version <= 1.21.
 
-## Licence
-
-NoiseCut is licenced under the [GNU Affero General Public License
-(AGPLv3)](LICENSE).
-
-## Contact
-
-* Developer: Zahra Zali, zali@gfz-potsdam.de
