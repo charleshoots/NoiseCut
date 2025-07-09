@@ -79,4 +79,6 @@ width=None
 
 event_length = 7200 #seconds
 endtimes = [read(f)[0].stats.endtime for f in files]
-[noisecut(read(f)[0].copy(),win_length=win_length,width=width).trim(t_end-event_length,t_end).write(OutputFolder/f.name) for t_end,f in zip(endtimes,files)]
+[noisecut(read(f)[0].copy(),win_length=win_length,width=width)
+ .trim(t_end-event_length,t_end)
+ .write(OutputFolder/f.name) for t_end,f in zip(endtimes,files)]
