@@ -17,7 +17,7 @@ import noisecut
 # The following script will run every SAC file found in a given DataFolder through the Noisecut function and write each output to a SAC output file in OutFolder.
 # Options for writing either a 24-hour or 2-hour output are available at the bottom.
 
-# This script is just a task manager for traces to send to NoiseCut, an HPS de-noising algorithm by Zahra Zali.
+# This script is just a task manager for traces to send through NoiseCut, an HPS de-noising algorithm by Zahra Zali.
 # Read Zali et al. (2023) for more details.
 
 # Assuming you ahave the basic packages installed (numpy, pandas, obspy, librosa, matplotlib), 
