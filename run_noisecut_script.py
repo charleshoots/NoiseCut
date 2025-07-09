@@ -77,6 +77,9 @@ width=None
 # If you want to trim the output to just the last 2-hours of the trace for your event (event_length parameter).
 # use the following lines and run them instead of the above:
 
+# Note: You'll have to tweak the loop below a bit if you also want to get the spectrograms at each stage of processing as outputs to plot. 
+# Not required to run the code, just useful for seeing what it's doing.
+
 event_length = 7200 #trace length (seconds) to trim the output to.
 endtimes = [read(f)[0].stats.endtime for f in files]
 [noisecut(
