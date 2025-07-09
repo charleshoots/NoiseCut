@@ -17,6 +17,9 @@ import noisecut
 # The following script will run every SAC file found in a given DataFolder through the Noisecut function and write each output to a SAC output file in OutFolder.
 # Options for writing either a 24-hour or 2-hour output are available at the bottom.
 
+# This script is just a task manager for traces to send to NoiseCut, an HPS de-noising algorithm by Zahra Zali.
+# Read Zali et al. (2023) for more details.
+
 # Assuming you ahave the basic packages installed (numpy, pandas, obspy, librosa, matplotlib), 
 # You will also need to install one called librosa (pip install librosa works) 
 # After that, you can run this script to process all of your data through noisecut.
@@ -40,8 +43,7 @@ win_length=163.84 #This is the length of the window in seconds that defines how 
 # A shorter length gives greater temporal resolution at the cost of frequency resolution, and vice versa for larger values.
 # The function will use this 163.84 value by default if not specified.
 # I'd recommend not changing this value unless you have done a fair amount of testing.
-# This script is just a task manager for traces to send to NoiseCut, an HPS de-noising algorithm by Zahra Zali.
-# Read Zali et al. (2023) for more details.
+# Read Zali et al. (2023) for more details on these parameters.
 
 # 2-The similarity matrix minimum wait time (in samples):
 width=None 
