@@ -77,8 +77,11 @@ width=None
 # If you want to trim the output to just the last 2-hours of the trace for your event (event_length parameter).
 # use the following lines and run them instead of the above:
 
-event_length = 7200 #seconds
+event_length = 7200 #trace length (seconds) to trim the output to.
 endtimes = [read(f)[0].stats.endtime for f in files]
-[noisecut(read(f)[0].copy(),win_length=win_length,width=width)
- .trim(t_end-event_length,t_end)
- .write(OutputFolder/f.name) for t_end,f in zip(endtimes,files)]
+[noisecut(
+ read(f)[0].copy(), #Input trace for noisecut
+ win_length=win_length,width=width) # parameters for noisecut
+ .trim(t_end-event_length,t_end) #trims the output from noisecut
+ .write(OutputFolder/f.name) #saves the trimmed output to a SAC file
+ for t_end,f in zip(endtimes,files)] #iterates this through every file listed in the files variable.
