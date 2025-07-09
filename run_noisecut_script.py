@@ -40,6 +40,7 @@ win_length=163.84 #This is the length of the window in seconds that defines how 
 # A shorter length gives greater temporal resolution at the cost of frequency resolution, and vice versa for larger values.
 # The function will use this 163.84 value by default if not specified.
 # I'd recommend not changing this value unless you have done a fair amount of testing.
+# This script is just a task manager for traces to send to NoiseCut, an HPS de-noising algorithm by Zahra Zali.
 # Read Zali et al. (2023) for more details.
 
 # 2-The similarity matrix minimum wait time (in samples):
